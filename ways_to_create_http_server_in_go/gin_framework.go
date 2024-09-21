@@ -37,11 +37,18 @@ func indexHandler(ctx *gin.Context) {
 
 func main() {
 	gin.SetMode(gin.ReleaseMode)
+
 	router := gin.New()
+
+	router.Use(gin.Logger())
+	router.Use(gin.Recovery())
 
 	router.GET("/", indexHandler)
 	router.NoRoute(handle404Request)
 
 	log.Default().Println("server listen on port 3000!")
-	router.Run(":3000")
+	err := router.Run(":3000")
+	if err != nil {
+		log.Fatalf("server failed to start: %s", err.Error())
+	}
 }

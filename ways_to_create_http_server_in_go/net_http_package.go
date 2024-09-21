@@ -60,6 +60,13 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	http.HandleFunc("/", indexHandler)
+
+	defer func() {
+        if r := recover(); r != nil {
+            fmt.Println("panic recovered. error:\n", r)
+        }
+    }()
+
 	log.Default().Println("server listen on port 3000!")
 	err := http.ListenAndServe(":3000", nil)
 	if err != nil {
